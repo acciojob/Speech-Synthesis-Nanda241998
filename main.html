@@ -17,12 +17,12 @@
       </select>
 
       <label for="rate">Rate:</label>
-      <input name="rate" type="range" min="0" max="3" value="1" step="0.1">
+      <input name="rate" type="range" min="0" max="3" value="1" step="0.1" id="rate">
 
       <label for="pitch">Pitch:</label>
 
-      <input name="pitch" type="range" min="0" max="2" step="0.1">
-      <textarea name="text">Hello! I love JavaScript 👍</textarea>
+      <input name="pitch" type="range" min="0" max="2" step="0.1" id="pitch">
+      <textarea name="text" id="textInput" placeholder="please enter text"></textarea>
       <button id="stop">Stop!</button>
       <button id="speak">Speak</button>
 
@@ -30,13 +30,280 @@
 
 <script>
   const msg = new SpeechSynthesisUtterance();
-  let voices = [];
+  let voices = [
+    {
+        "name": "Alex",
+        "lang": "en-US"
+    },
+    {
+        "name": "Alice",
+        "lang": "it-IT"
+    },
+    {
+        "name": "Alva",
+        "lang": "sv-SE"
+    },
+    {
+        "name": "Amelie",
+        "lang": "fr-CA"
+    },
+    {
+        "name": "Anna",
+        "lang": "de-DE"
+    },
+    {
+        "name": "Carmit",
+        "lang": "he-IL"
+    },
+    {
+        "name": "Damayanti",
+        "lang": "id-ID"
+    },
+    {
+        "name": "Daniel",
+        "lang": "en-GB"
+    },
+    {
+        "name": "Diego",
+        "lang": "es-AR"
+    },
+    {
+        "name": "Ellen",
+        "lang": "nl-BE"
+    },
+    {
+        "name": "Fiona",
+        "lang": "en"
+    },
+    {
+        "name": "Fred",
+        "lang": "en-US"
+    },
+    {
+        "name": "Ioana",
+        "lang": "ro-RO"
+    },
+    {
+        "name": "Joana",
+        "lang": "pt-PT"
+    },
+    {
+        "name": "Jorge",
+        "lang": "es-ES"
+    },
+    {
+        "name": "Juan",
+        "lang": "es-MX"
+    },
+    {
+        "name": "Kanya",
+        "lang": "th-TH"
+    },
+    {
+        "name": "Karen",
+        "lang": "en-AU"
+    },
+    {
+        "name": "Kyoko",
+        "lang": "ja-JP"
+    },
+    {
+        "name": "Laura",
+        "lang": "sk-SK"
+    },
+    {
+        "name": "Lekha",
+        "lang": "hi-IN"
+    },
+    {
+        "name": "Luca",
+        "lang": "it-IT"
+    },
+    {
+        "name": "Luciana",
+        "lang": "pt-BR"
+    },
+    {
+        "name": "Maged",
+        "lang": "ar-SA"
+    },
+    {
+        "name": "Mariska",
+        "lang": "hu-HU"
+    },
+    {
+        "name": "Mei-Jia",
+        "lang": "zh-TW"
+    },
+    {
+        "name": "Melina",
+        "lang": "el-GR"
+    },
+    {
+        "name": "Milena",
+        "lang": "ru-RU"
+    },
+    {
+        "name": "Moira",
+        "lang": "en-IE"
+    },
+    {
+        "name": "Monica",
+        "lang": "es-ES"
+    },
+    {
+        "name": "Nora",
+        "lang": "nb-NO"
+    },
+    {
+        "name": "Paulina",
+        "lang": "es-MX"
+    },
+    {
+        "name": "Samantha",
+        "lang": "en-US"
+    },
+    {
+        "name": "Sara",
+        "lang": "da-DK"
+    },
+    {
+        "name": "Satu",
+        "lang": "fi-FI"
+    },
+    {
+        "name": "Sin-ji",
+        "lang": "zh-HK"
+    },
+    {
+        "name": "Tessa",
+        "lang": "en-ZA"
+    },
+    {
+        "name": "Thomas",
+        "lang": "fr-FR"
+    },
+    {
+        "name": "Ting-Ting",
+        "lang": "zh-CN"
+    },
+    {
+        "name": "Veena",
+        "lang": "en-IN"
+    },
+    {
+        "name": "Victoria",
+        "lang": "en-US"
+    },
+    {
+        "name": "Xander",
+        "lang": "nl-NL"
+    },
+    {
+        "name": "Yelda",
+        "lang": "tr-TR"
+    },
+    {
+        "name": "Yuna",
+        "lang": "ko-KR"
+    },
+    {
+        "name": "Yuri",
+        "lang": "ru-RU"
+    },
+    {
+        "name": "Zosia",
+        "lang": "pl-PL"
+    },
+    {
+        "name": "Zuzana",
+        "lang": "cs-CZ"
+    }
+  ];
   const voicesDropdown = document.querySelector('[name="voice"]');
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
 
   //Your code goes here
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Populate the dropdown with options
+        voices.forEach(obj => {
+            const option = document.createElement('option');
+            option.value = obj.lang; // Assign the value from the 'id' property
+            option.textContent = obj.name; // Display the text from the 'name' property
+            voicesDropdown.appendChild(option);
+        });
+
+        voicesDropdown.addEventListener('change', () => {
+            const selectedLang = voicesDropdown.value;
+            const selectedLangName = voicesDropdown.options[voicesDropdown.selectedIndex].text;
+            msg.voiceURI = selectedLangName;
+            msg.lang = selectedLang;
+        });
+
+        const rate = document.getElementById('rate');
+        const pitch = document.getElementById('pitch');
+
+        rate.addEventListener('input', ()=>{
+            const seletedValue = rate.value;
+            window.seletedValue = seletedValue;
+            // console.log(seletedValue)
+            msg.rate = seletedValue;
+        });
+
+        pitch.addEventListener('input', ()=>{
+            const seletedValue = pitch.value;
+            window.seletedValue = seletedValue;
+            // console.log(seletedValue)
+            msg.pitch = seletedValue;
+        });
+        // const textInput = document.getElementById('textInput');
+        // msg.text =  textInput.value;
+        // console.log(msg.text)
+
+        
+        textInput.addEventListener('input', ()=>{
+            const textVal = textInput.value;
+            // console.log(textVal)
+            msg.text = textVal;
+        })
+        
+
+        msg.volume = 1;
+        msg.text = textInput
+
+
+   });
+
+   
+
+   function textToSpeech(){
+    // console.log(msg.voiceURI)
+    // console.log(msg.lang)
+    // console.log(msg.rate)
+    // console.log(msg.pitch)
+    // console.log(msg.text)
+    // console.log(msg.volume)
+    if(msg.voiceURI == '' || msg.lang == ''){
+        alert('Please select voice')
+    }else{
+        if(textInput.value == ''){
+            alert('please enter text')
+        }else{
+            speechSynthesis.speak(msg)
+        }
+    }
+   }    
+
+   function stopTextToSpeech(){
+    speechSynthesis.cancel(msg)
+   }
+
+   speakButton.addEventListener('click', textToSpeech)
+   stopButton.addEventListener('click', stopTextToSpeech)
 </script>
 
 </body>
